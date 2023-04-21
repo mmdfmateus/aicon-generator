@@ -6,6 +6,7 @@ const config = {
   overrides: [
     {
       extends: [
+        "standard",
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
       ],
       files: ["*.ts", "*.tsx"],
@@ -21,6 +22,7 @@ const config = {
   plugins: ["@typescript-eslint"],
   extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
   rules: {
+    "semi": [1, "always"],
     "@typescript-eslint/consistent-type-imports": [
       "warn",
       {
