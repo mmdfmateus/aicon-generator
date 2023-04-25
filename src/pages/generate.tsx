@@ -7,6 +7,7 @@ import { type ChangeEvent, useState, type FormEvent } from 'react';
 import { api } from '~/utils/api';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { Button } from '~/components/Button';
+import Image from 'next/image';
 
 const GeneratePage: NextPage = () => {
     const session = useSession();
@@ -15,6 +16,7 @@ const GeneratePage: NextPage = () => {
     const [form, setForm] = useState({
         prompt: '',
     });
+    const [imageUrl, setImageUrl] = useState('');
 
     const updateForm = (key: string) => {
         return function (e: ChangeEvent<HTMLInputElement>){
@@ -28,6 +30,9 @@ const GeneratePage: NextPage = () => {
     const generateIcon = api.generate.generateIcon.useMutation({
         onSuccess(data) {
             console.log('mutation finished', data);
+
+            setImageUrl(data.imageUrl);
+            setForm({ prompt: '' });
         }
     });
 
@@ -36,7 +41,9 @@ const GeneratePage: NextPage = () => {
 
         await generateIcon.mutateAsync({
             prompt: form.prompt
-        })
+        });
+
+        
     }
 
     return (
@@ -55,10 +62,11 @@ const GeneratePage: NextPage = () => {
                 <form className='flex flex-col gap-4' onSubmit={handleFormSubmit} >
                     <FormGroup>
                         <label>Prompt</label>
-                        <Input type="text" onChange={updateForm('prompt')} />
+                        <Input value={form.prompt} type="text" onChange={updateForm('prompt')} />
                     </FormGroup>
                     <Button>Submit</Button>
                 </form>
+                <Image className='py-2' src={imageUrl} alt={'prompt'} width={250} height={250} />
             </main>
         </>
     );
