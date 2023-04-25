@@ -31,7 +31,7 @@ const GeneratePage: NextPage = () => {
         onSuccess(data) {
             console.log('mutation finished', data);
 
-            setImageUrl(data.imageUrl);
+            setImageUrl(data.base64);
             setForm({ prompt: '' });
         }
     });
@@ -66,7 +66,12 @@ const GeneratePage: NextPage = () => {
                     </FormGroup>
                     <Button>Submit</Button>
                 </form>
-                <Image className='py-2' src={imageUrl} alt={'prompt'} width={250} height={250} />
+                <Image 
+                    src={`data:image/png;base64,${imageUrl}`} 
+                    className='py-2' 
+                    alt={'prompt'} 
+                    width={250} 
+                    height={250} />
             </main>
         </>
     );

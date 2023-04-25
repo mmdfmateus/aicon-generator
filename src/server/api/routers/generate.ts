@@ -5,6 +5,16 @@ import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
 import { Configuration, OpenAIApi } from 'openai';
 import { env } from '~/env.mjs';
 import { TRPCError } from '@trpc/server';
+import { base64Image } from '~/data/b64Image';
+import AWS from 'aws-sdk';
+
+const s3 = new AWS.S3({
+    credentials: {
+        accessKeyId: env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+    },
+    region: 'us-east-1',
+});
 
 const configuration = new Configuration({
     apiKey: env.DALLE_API_KEY,
@@ -14,16 +24,18 @@ const openai = new OpenAIApi(configuration);
 
 const generateIcon = async (prompt: string): Promise<string> => {
     if (env.MOCK_DALLE === 'true') {
-        return 'https://cdn.openai.com/labs/images/An%20oil%20painting%20by%20Matisse%20of%20a%20humanoid%20robot%20playing%20chess.webp?v=1';
+        return base64Image;
+        // return 'https://cdn.openai.com/labs/images/An%20oil%20painting%20by%20Matisse%20of%20a%20humanoid%20robot%20playing%20chess.webp?v=1';
     }
 
     const response = await openai.createImage({
         prompt,
         n: 1,
-        size: '1024x1024',
+        size: '512x512',
+        response_format: 'b64_json',
     });
 
-    return response.data.data[0]?.url ?? '';
+    return response.data.data[0]?.b64_json ?? '';
 };
 
 export const generateRouter = createTRPCRouter({
@@ -55,10 +67,27 @@ export const generateRouter = createTRPCRouter({
                 });
             }
 
-            const url = await generateIcon(input.prompt);
+            const base64Encoded = await generateIcon(input.prompt);
+
+            const icon = await ctx.prisma.icon.create({
+                data: {
+                    prompt: input.prompt,
+                    userId: ctx.session?.user.id,
+                },
+            });
+
+            await s3
+                .putObject({
+                    Bucket: 'aicon-generator-bucket',
+                    Body: Buffer.from(base64Encoded, 'base64'),
+                    Key: icon.id,
+                    ContentEncoding: 'base64',
+                    ContentType: 'image/png',
+                })
+                .promise();
 
             return {
-                imageUrl: url ?? '',
+                base64: base64Encoded ?? '',
             };
         }),
 });

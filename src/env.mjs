@@ -23,6 +23,8 @@ const server = z.object({
   GOOGLE_CLIENT_SECRET: z.string().min(1),
   DALLE_API_KEY: z.string().min(1),
   MOCK_DALLE: z.string().min(1),
+  AWS_ACCESS_KEY_ID: z.string().min(1),
+  AWS_SECRET_ACCESS_KEY: z.string().min(1),
 });
 
 /**
@@ -47,7 +49,9 @@ const processEnv = {
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   DALLE_API_KEY: process.env.DALLE_API_KEY,
-  MOCK_DALLE: process.env.MOCK_DALLE
+  MOCK_DALLE: process.env.MOCK_DALLE,
+  AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+  AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
 };
 
 // Don't touch the part below
