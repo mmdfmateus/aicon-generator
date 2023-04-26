@@ -8,6 +8,8 @@ import { TRPCError } from '@trpc/server';
 import { base64Image } from '~/data/b64Image';
 import AWS from 'aws-sdk';
 
+const AWS_BUCKET_NAME = 'aicon-generator-bucket';
+
 const s3 = new AWS.S3({
     credentials: {
         accessKeyId: env.AWS_ACCESS_KEY_ID,
@@ -78,7 +80,7 @@ export const generateRouter = createTRPCRouter({
 
             await s3
                 .putObject({
-                    Bucket: 'aicon-generator-bucket',
+                    Bucket: AWS_BUCKET_NAME,
                     Body: Buffer.from(base64Encoded, 'base64'),
                     Key: icon.id,
                     ContentEncoding: 'base64',
@@ -87,7 +89,7 @@ export const generateRouter = createTRPCRouter({
                 .promise();
 
             return {
-                base64: base64Encoded ?? '',
+                imageUrl: `https://${AWS_BUCKET_NAME}.s3.amazonaws.com/${icon.id}`,
             };
         }),
 });

@@ -9,7 +9,7 @@ const config = {
     reactStrictMode: true,
 
     images: {
-        domains: ['cdn.openai.com']
+        domains: ['cdn.openai.com', 'aicon-generator-bucket.s3.amazonaws.com']
     },
 
     /**
