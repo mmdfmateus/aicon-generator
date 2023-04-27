@@ -25,14 +25,18 @@ const server = z.object({
   MOCK_DALLE: z.string().min(1),
   AWS_ACCESS_KEY_ID: z.string().min(1),
   AWS_SECRET_ACCESS_KEY: z.string().min(1),
+  STRIPE_SECRET_KEY: z.string().min(1),
+  HOST_NAME: z.string().min(1),
+  STRIPE_PRICE_ID: z.string().min(1),
 });
 
 /**
  * Specify your client-side environment variables schema here. This way you can ensure the app isn't
  * built with invalid env vars. To expose them to the client, prefix them with `NEXT_PUBLIC_`.
- */
+*/
 const client = z.object({
-  // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
+    // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
+    STRIPE_PUBLIC_KEY: z.string().min(1),
 });
 
 /**
@@ -52,6 +56,10 @@ const processEnv = {
   MOCK_DALLE: process.env.MOCK_DALLE,
   AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+  STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+  HOST_NAME: process.env.HOST_NAME,
+  STRIPE_PRICE_ID: process.env.STRIPE_PRICE_ID,
 };
 
 // Don't touch the part below
