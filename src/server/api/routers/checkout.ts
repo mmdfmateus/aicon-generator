@@ -13,8 +13,8 @@ export const checkoutRouter = createTRPCRouter({
             line_items: [{ price: env.STRIPE_PRICE_ID, quantity: 1 }],
             mode: 'payment',
             payment_method_types: ['card'],
-            success_url: `${env.HOST_NAME}/success`,
-            cancel_url: `${env.HOST_NAME}/cancel`,
+            success_url: `${env.HOST_NAME}`,
+            cancel_url: `${env.HOST_NAME}`,
             metadata: {
                 userId: ctx.session.user.id,
             },
