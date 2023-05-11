@@ -4,18 +4,18 @@ import Image from 'next/image';
 import { PrimaryLinkButton } from '~/components/PrimaryLinkButton';
 
 const HeroBanner = () => {
-    return <section className='flex justify-center items-center gap-12 mt-20'>
+    return <section className='flex justify-center items-center gap-12 mt-8 sm:mt-20 mb-8 sm:mb-20 flex-col-reverse sm:flex-row'>
         <div className='max-w-lg flex flex-col gap-4'>
           <h1 className='text-5xl'>Generate icons in a click of a button</h1>
-          <p className='text-2xl'>Use AI to generate icons instead paying a designer for it</p>
+          <p className='text-2xl text-slate-300'>Use AI to generate icons instead paying a designer for it</p>
           <PrimaryLinkButton href='/generate' className='self-start'>Generate icons now!</PrimaryLinkButton>
         </div>
         <div className=''>
             <Image 
             src='/banner.png'
             alt='Banner with icon examples'
-            width={400}
-            height={400} 
+            width={300}
+            height={300} 
             className='rounded-lg'/>
           </div>
     </section>
