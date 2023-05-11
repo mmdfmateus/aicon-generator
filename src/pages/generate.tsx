@@ -8,12 +8,10 @@ import { api } from '~/utils/api';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { Button } from '~/components/Button';
 import Image from 'next/image';
-import { useBuyCredits } from '~/hooks/useBuyCredits';
 
 const GeneratePage: NextPage = () => {
     const session = useSession();
     const isLoggedIn = !!session.data;
-    const { buyCredits } = useBuyCredits();
 
     const [form, setForm] = useState({
         prompt: '',
@@ -56,16 +54,6 @@ const GeneratePage: NextPage = () => {
             <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className="flex min-h-screen flex-col text-white items-center justify-center">
-                {session.data?.user.name}
-                { isLoggedIn ?
-                    (
-                        <>
-                            <Button onClick={() => buyCredits()}>Buy credits</Button>
-                            <Button onClick={() => signOut()} >Logout</Button>
-                        </>
-                    )
-                    : <Button onClick={() => signIn()} >Login</Button> 
-                }
                 <form className='flex flex-col gap-4' onSubmit={handleFormSubmit} >
                     <FormGroup>
                         <label>Prompt</label>
@@ -73,12 +61,14 @@ const GeneratePage: NextPage = () => {
                     </FormGroup>
                     <Button>Submit</Button>
                 </form>
-                <Image 
+                {imageUrl ?? 
+                    <Image 
                     src={imageUrl} 
                     className='py-2' 
                     alt={'prompt'} 
                     width={250} 
                     height={250} />
+                }
             </main>
         </>
     );
