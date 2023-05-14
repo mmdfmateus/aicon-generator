@@ -22,7 +22,7 @@ export const Header = () => {
                 { isLoggedIn ?
                     <div className='flex gap-4'>
                         <Button onClick={() => buyCredits()}>Buy credits</Button>
-                        <Button onClick={() => signOut()} >Logout</Button>
+                        <Button variant='secondary' onClick={() => signOut()} >Logout</Button>
                     </div>
                     : <Button onClick={() => signIn()} >Login</Button> 
                 }
