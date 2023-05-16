@@ -8,10 +8,13 @@ import { api } from '~/utils/api';
 import { Button } from '~/components/Button';
 import Image from 'next/image';
 
+const colors = ['blue', 'orange', 'black', 'red', 'yellow', 'green', 'white', 'purple'];
+
 const GeneratePage: NextPage = () => {
 
     const [form, setForm] = useState({
         prompt: '',
+        color: ''
     });
     const [imageUrl, setImageUrl] = useState<string>('');
 
@@ -29,7 +32,7 @@ const GeneratePage: NextPage = () => {
             console.log('mutation finished', data);
 
             setImageUrl(data.imageUrl);
-            setForm({ prompt: '' });
+            setForm(prev => ({ ...prev, prompt: '' }));
         },
         onError(error) {
             console.log(error);
@@ -43,7 +46,8 @@ const GeneratePage: NextPage = () => {
 
         try {
             await generateIcon.mutateAsync({
-                prompt: form.prompt
+                prompt: form.prompt,
+                color: form.color,
             });
         } catch (error) {
         }
@@ -69,12 +73,19 @@ const GeneratePage: NextPage = () => {
                     </FormGroup>
 
                     <h2>2. Pick your icon color</h2>
-                    <FormGroup>
+                    <FormGroup className='grid grid-cols-4 mb-5'>
                         {/* <label>Color</label> */}
-                        <label className='flex items-center gap-2 text-md'>
-                            <Input value={form.prompt} type="radio" name='color' onChange={updateForm('prompt')} />
-                            Blue
-                        </label>
+                        {colors.map((color) => (
+                            <label key={color} className='flex items-center gap-2 text-md cursor-pointer'>
+                                <Input 
+                                    value={color} 
+                                    type="radio" 
+                                    name='color'
+                                    checked={color === form.color} 
+                                    onChange={updateForm('color')} />
+                                {color}
+                            </label>
+                        ))}
                     </FormGroup>
 
                     <Button
@@ -87,7 +98,7 @@ const GeneratePage: NextPage = () => {
                 {imageUrl &&
                     <>
                         <h2>Your icons</h2>
-                        <section className='grid grid-cols-4 gap-4'>
+                        <section className='grid grid-cols-4 gap-4 mb-12'>
                             <Image 
                             src={imageUrl} 
                             className='py-2' 
