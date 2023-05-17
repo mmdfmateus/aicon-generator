@@ -27,12 +27,15 @@ const GeneratePage: NextPage = () => {
         }
     };
 
+    const ctx = api.useContext();
+
     const generateIcon = api.generate.generateIcon.useMutation({
         onSuccess(data) {
             console.log('mutation finished', data);
 
             setImageUrl(data.imageUrl);
             setForm(prev => ({ ...prev, prompt: '' }));
+            void ctx.user.getCredits.invalidate();
         },
         onError(error) {
             console.log(error);
