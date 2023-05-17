@@ -1,9 +1,13 @@
 import { z } from 'zod';
 
-import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
+import {
+    createTRPCRouter,
+    protectedProcedure,
+    publicProcedure,
+} from '~/server/api/trpc';
 
 export const iconsRouter = createTRPCRouter({
-    get: publicProcedure
+    get: protectedProcedure
         .input(
             z
                 .object({
@@ -15,7 +19,7 @@ export const iconsRouter = createTRPCRouter({
         .query(async ({ ctx, input }) => {
             const icons = await ctx.prisma.icon.findMany({
                 where: {
-                    userId: ctx.session?.user.id,
+                    userId: ctx.session.user.id,
                 },
                 skip: input?.skip ?? 0,
                 take: input?.take ?? 20,
@@ -23,4 +27,14 @@ export const iconsRouter = createTRPCRouter({
 
             return icons;
         }),
+    getCommunityIcons: publicProcedure.query(async ({ ctx }) => {
+        const icons = await ctx.prisma.icon.findMany({
+            take: 40,
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
+
+        return icons;
+    }),
 });

@@ -19,6 +19,7 @@ export const Header = () => {
                     {isLoggedIn && 
                         <PrimaryLink href="/collection">Collection</PrimaryLink>
                     }
+                    <PrimaryLink href="/community">Community</PrimaryLink>
                     <PrimaryLink href="/about">About</PrimaryLink>
                 </ul>
                 
