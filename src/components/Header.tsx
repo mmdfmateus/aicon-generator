@@ -16,6 +16,9 @@ export const Header = () => {
                 
                 <ul className='flex gap-4 sm:gap-7'>
                     <PrimaryLink href="/generate">Generate</PrimaryLink>
+                    {isLoggedIn && 
+                        <PrimaryLink href="/collection">Collection</PrimaryLink>
+                    }
                     <PrimaryLink href="/about">About</PrimaryLink>
                 </ul>
                 

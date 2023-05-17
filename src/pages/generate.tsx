@@ -62,7 +62,7 @@ const GeneratePage: NextPage = () => {
             <meta name="description" content="Generate icons with AI" />
             <link rel="icon" href="/favicon.ico" />
             </Head>
-            <main className="container mx-auto mt-20 flex min-h-screen flex-col text-white gap-4 px-4">
+            <main className="container mx-auto mt-20 flex flex-col text-white gap-4 px-4">
                 <h1 className='text-5xl'>Let's create some icons!</h1>
                 <p className='text-2xl text-slate-300'>Describe as much as possible how you want it to look like</p>
                 <form className='flex flex-col gap-4 mt-8' onSubmit={handleFormSubmit} >

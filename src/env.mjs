@@ -26,6 +26,7 @@ const server = z.object({
   AWS_ACCESS_KEY_ID: z.string().min(1),
   AWS_SECRET_ACCESS_KEY: z.string().min(1),
   STRIPE_SECRET_KEY: z.string().min(1),
+  AWS_BUCKET_NAME: z.string().min(1),
   HOST_NAME: z.string().min(1),
   STRIPE_PRICE_ID: z.string().min(1),
   STRIPE_WEBHOOK_SECRET: z.string().min(1),
@@ -38,6 +39,7 @@ const server = z.object({
 const client = z.object({
     // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
     NEXT_PUBLIC_STRIPE_PUBLIC_KEY: z.string(),
+    NEXT_PUBLIC_AWS_BUCKET_NAME: z.string(),
 });
 
 /**
@@ -57,6 +59,8 @@ const processEnv = {
   MOCK_DALLE: process.env.MOCK_DALLE,
   AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+  AWS_BUCKET_NAME: process.env.AWS_BUCKET_NAME,
+  NEXT_PUBLIC_AWS_BUCKET_NAME: process.env.NEXT_PUBLIC_AWS_BUCKET_NAME,
   NEXT_PUBLIC_STRIPE_PUBLIC_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY,
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
   HOST_NAME: process.env.HOST_NAME,
