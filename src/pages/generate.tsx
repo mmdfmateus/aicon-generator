@@ -7,6 +7,7 @@ import { type ChangeEvent, useState, type FormEvent } from 'react';
 import { api } from '~/utils/api';
 import { Button } from '~/components/Button';
 import Image from 'next/image';
+import toast from 'react-hot-toast';
 
 const colors = ['blue', 'orange', 'black', 'red', 'yellow', 'green', 'white', 'purple'];
 
@@ -37,6 +38,7 @@ const GeneratePage: NextPage = () => {
         },
         onError(error) {
             console.log(error);
+            toast.error(error.message);
 
             setImagesUrl([]);
         },
@@ -94,7 +96,7 @@ const GeneratePage: NextPage = () => {
                         ))}
                     </FormGroup>
 
-                    <div className='flex justify-between'>
+                    <div className='flex justify-between p-4'>
                         <div className='flex flex-col justify-center gap-2 items-center w-1/2'>
                             <h2>3. How many do you want?</h2>
                             <FormGroup className=''>
