@@ -23,6 +23,9 @@ export const iconsRouter = createTRPCRouter({
                 },
                 skip: input?.skip ?? 0,
                 take: input?.take ?? 20,
+                orderBy: {
+                    createdAt: 'desc',
+                },
             });
 
             return icons;
