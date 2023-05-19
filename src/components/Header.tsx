@@ -36,7 +36,7 @@ export const Header = () => {
                 
                 { isLoggedIn ?
                     <div className='flex gap-4'>
-                        {credits && <span className='flex items-center text-slate-400 cursor-default'>{`${credits} credits left`}</span>}
+                        {credits !== undefined && <span className='invisible md:visible flex items-center text-slate-400 cursor-default'>{`${credits} credits left`}</span>}
                         <Button className='px-0 py-0 sm:px-2 sm:py-2' onClick={() => buyCredits()}>Buy credits</Button>
                         <Button className='px-0 py-0 sm:px-2 sm:py-2' variant='secondary' onClick={() => signOut()} >Logout</Button>
                     </div>
