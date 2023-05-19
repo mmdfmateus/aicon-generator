@@ -55,8 +55,6 @@ const GeneratePage: NextPage = () => {
             });
         } catch (error) {
         }
-
-        
     }
 
     return (

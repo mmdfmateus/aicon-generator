@@ -5,9 +5,14 @@ import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
 import { Configuration, OpenAIApi } from 'openai';
 import { env } from '~/env.mjs';
 import { TRPCError } from '@trpc/server';
-import { base64Image } from '~/data/b64Image';
 import AWS from 'aws-sdk';
 import { getImageUrl } from '~/utils/imageUtils';
+import { createApi } from 'unsplash-js';
+import axios from 'axios';
+
+const unsplashApi = createApi({
+    accessKey: env.UNSPLASH_ACCESS_KEY,
+});
 
 const s3 = new AWS.S3({
     credentials: {
@@ -25,8 +30,27 @@ const openai = new OpenAIApi(configuration);
 
 const generateIcon = async (prompt: string, amount = 1): Promise<string[]> => {
     if (env.MOCK_DALLE === 'true') {
-        return new Array<string>(amount).fill(base64Image);
-        // return 'https://cdn.openai.com/labs/images/An%20oil%20painting%20by%20Matisse%20of%20a%20humanoid%20robot%20playing%20chess.webp?v=1';
+        const { response, errors, type } = await unsplashApi.search.getPhotos({
+            query: prompt,
+            page: 1,
+            perPage: amount,
+            orientation: 'squarish',
+        });
+
+        if (type === 'error') {
+            throw new TRPCError({
+                code: 'INTERNAL_SERVER_ERROR',
+                message: `Something wrong happened when fetching from Unsplash: ${errors[0]}`,
+            });
+        }
+
+        const imgs = await Promise.all(
+            response.results.map(
+                async (photo) =>
+                    await fetchImageBase64(`${photo.urls.small}.jpg`)
+            )
+        );
+        return imgs;
     }
 
     const response = await openai.createImage({
@@ -37,7 +61,6 @@ const generateIcon = async (prompt: string, amount = 1): Promise<string[]> => {
     });
 
     return response.data.data.map((result) => result.b64_json ?? '');
-    // return response.data.data[0]?.b64_json ?? '';
 };
 
 const storeIconsAsync = async (
@@ -63,6 +86,19 @@ const storeIconsAsync = async (
         .promise();
 
     return icon;
+};
+
+const fetchImageBase64 = async (imageUrl: string) => {
+    const imageBase64 = Buffer.from(
+        (
+            await axios.get(imageUrl, {
+                responseType: 'arraybuffer',
+            })
+        ).data,
+        'utf-8'
+    ).toString('base64');
+
+    return imageBase64;
 };
 
 export const generateRouter = createTRPCRouter({
@@ -99,7 +135,7 @@ export const generateRouter = createTRPCRouter({
             const finalPrompt = `a modern icon in ${input.color} of ${input.prompt}, 3d rendered, metallic material, minimalistic, high resolution`;
 
             const base64EncodedImages = await generateIcon(
-                finalPrompt,
+                env.MOCK_DALLE ? input.prompt : finalPrompt,
                 input.amount
             );
 

@@ -30,6 +30,8 @@ const server = z.object({
   HOST_NAME: z.string().min(1),
   STRIPE_PRICE_ID: z.string().min(1),
   STRIPE_WEBHOOK_SECRET: z.string().min(1),
+  UNSPLASH_ACCESS_KEY: z.string().min(1),
+  UNSPLASH_SECRET_KEY: z.string().min(1),
 });
 
 /**
@@ -66,6 +68,8 @@ const processEnv = {
   HOST_NAME: process.env.HOST_NAME,
   STRIPE_PRICE_ID: process.env.STRIPE_PRICE_ID,
   STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+  UNSPLASH_ACCESS_KEY: process.env.UNSPLASH_ACCESS_KEY,
+  UNSPLASH_SECRET_KEY: process.env.UNSPLASH_SECRET_KEY,
 };
 
 // Don't touch the part below
