@@ -42,6 +42,7 @@ const client = z.object({
     // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
     NEXT_PUBLIC_STRIPE_PUBLIC_KEY: z.string(),
     NEXT_PUBLIC_AWS_BUCKET_NAME: z.string(),
+    NEXT_PUBLIC_MOCK_DALLE: z.string(),
 });
 
 /**
@@ -70,6 +71,7 @@ const processEnv = {
   STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
   UNSPLASH_ACCESS_KEY: process.env.UNSPLASH_ACCESS_KEY,
   UNSPLASH_SECRET_KEY: process.env.UNSPLASH_SECRET_KEY,
+  NEXT_PUBLIC_MOCK_DALLE: process.env.NEXT_PUBLIC_MOCK_DALLE,
 };
 
 // Don't touch the part below
